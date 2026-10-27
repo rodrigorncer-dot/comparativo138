@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comparativo de Fornecedores – Máquinas de Grua</title>
+<style>
+  :root{
+    --bg:#f6f8fc; --card:#ffffff; --soft:#f1f4fa; --line:#e3e8f2;
+    --txt:#1f2a44; --muted:#5f6b85; --accent:#2f6fed; --accent-soft:#e8f0ff;
+    --gold:#d9a400; --gold-soft:#fff6d9; --silver:#8a96ad; --silver-soft:#eef1f6;
+    --bronze:#c46a2b; --bronze-soft:#fdeee3; --teal:#0f9d8a; --teal-soft:#e3f6f3;
+    --ok:#178a4c; --warn:#b26b00; --warn-soft:#fff3dc; --bad:#c62f3d;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--txt);line-height:1.55}
+  a{color:var(--accent);text-decoration:none;font-weight:600}
+  svg.ic{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+  /* Barra superior */
+  .topbar{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}
+  .topbar .in{max-width:1200px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:28px}
+  .logo{width:42px;height:42px;border-radius:12px;background:var(--accent);color:#fff;display:grid;place-items:center}
+  .nav{display:flex;gap:22px;flex-wrap:wrap}
+  .nav a{color:var(--txt);font-weight:500;font-size:15px}
+  .nav a:hover{color:var(--accent)}
+
+  /* Hero */
+  .hero{background:var(--accent);color:#fff}
+  .hero .in{max-width:1200px;margin:0 auto;padding:56px 24px 90px;display:flex;justify-content:space-between;align-items:center;gap:30px;flex-wrap:wrap}
+  .hero h1{font-size:clamp(30px,4.5vw,46px);font-weight:700;line-height:1.15;max-width:620px}
+  .hero p{font-size:18px;opacity:.9;margin-top:12px}
+  .hero .cta{display:inline-flex;align-items:center;gap:8px;margin-top:26px;background:#fff;color:var(--accent);padding:13px 26px;border-radius:40px;font-size:15px}
+  .hero-ic{width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.14);display:grid;place-items:center}
+  .hero-ic svg{width:76px;height:76px;stroke:#fff;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+
+  /* Atalhos */
+  .shortcuts{max-width:1200px;margin:-50px auto 0;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;position:relative}
+  .sc{background:#fff;border-radius:20px;padding:22px;display:flex;align-items:center;gap:14px;box-shadow:0 6px 22px rgba(31,42,68,.08);color:var(--txt);transition:transform .25s}
+  .sc:hover{transform:translateY(-4px)}
+  .sc .ico{width:48px;height:48px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center}
+  .sc span{font-size:15px}
+
+  section{max-width:1200px;margin:0 auto;padding:56px 24px 10px}
+  h2{font-size:28px;font-weight:700;margin-bottom:6px}
+  .sub{color:var(--muted);margin-bottom:26px}
+  .card{background:var(--card);border-radius:24px;box-shadow:0 4px 18px rgba(31,42,68,.06)}
+  .reveal{opacity:0;transform:translateY(24px);transition:all .6s ease}
+  .reveal.show{opacity:1;transform:none}
+
+  /* Pódio */
+  .podium{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px}
+  .top{padding:28px;display:flex;flex-direction:column}
+  .r1{--c:var(--gold);--cs:var(--gold-soft)} .r2{--c:var(--silver);--cs:var(--silver-soft)} .r3{--c:var(--bronze);--cs:var(--bronze-soft)}
+  .top-head{display:flex;justify-content:space-between;align-items:center}
+  .medal{width:46px;height:46px;border-radius:50%;background:var(--cs);color:var(--c);font-weight:800;display:grid;place-items:center}
+  .top h3{font-size:22px;margin-top:16px}
+  .price{font-size:32px;font-weight:700;margin:6px 0 18px}
+  .info{list-style:none}
+  .info li{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+  .info li b{color:var(--muted);font-weight:500}
+  .info li span{text-align:right;font-weight:600}
+  .obs{margin-top:16px;font-size:14px;background:var(--cs);padding:10px 14px;border-radius:14px}
+  .btn{margin-top:auto;padding-top:18px}
+  .btn a{display:inline-flex;align-items:center;gap:6px;padding:11px 22px;border-radius:40px;border:1.5px solid var(--accent);font-size:14px;transition:all .2s}
+  .btn a:hover{background:var(--accent);color:#fff}
+  .pill{display:inline-block;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700}
+  .p-venda{background:var(--accent-soft);color:var(--accent)}
+  .p-loc{background:#f3e8ff;color:#7a3fc4}
+  .yes{color:var(--ok)} .no{color:var(--bad)} .wait{color:var(--warn)}
+  td.yes,td.no,td.wait{font-weight:700}
+
+  /* QR */
+  .qr{padding:36px;display:grid;gap:30px}
+  .qr-top{display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+  .qr-badge{width:84px;height:84px;border-radius:24px;background:var(--teal-soft);color:var(--teal);display:grid;place-items:center}
+  .qr-badge svg{width:44px;height:44px}
+  .qr-top h3{font-size:22px}
+  .tag{display:inline-flex;align-items:center;gap:6px;margin-top:8px;background:var(--warn-soft);color:var(--warn);font-weight:600;font-size:13px;padding:5px 14px;border-radius:20px}
+  .qr p.lead{color:#33405e;font-size:16px}
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+  .step{border:1px solid var(--line);border-radius:20px;padding:22px}
+  .step .ico{width:48px;height:48px;border-radius:50%;background:var(--teal-soft);color:var(--teal);display:grid;place-items:center;margin-bottom:14px}
+  .step small{color:var(--teal);font-weight:700;font-size:12px;letter-spacing:.5px}
+  .step h4{font-size:17px;margin:2px 0 6px}
+  .step p{font-size:14px;color:var(--muted)}
+  .benefits{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;list-style:none}
+  .benefits li{display:flex;gap:12px;align-items:flex-start;background:var(--soft);border-radius:16px;padding:16px;font-size:14.5px}
+  .benefits li svg{color:var(--teal)}
+  .note{display:flex;gap:12px;background:var(--warn-soft);border-radius:16px;padding:16px 18px;font-size:14.5px;color:#5c4210}
+  .note svg{color:var(--warn)}
+
+  /* Gráfico */
+  .chart{padding:30px}
+  .bar-row{display:grid;grid-template-columns:200px 1fr 130px;align-items:center;gap:14px;margin:12px 0}
+  .bar-row .lbl{font-size:14px;font-weight:600}
+  .track{background:var(--soft);height:14px;border-radius:10px;overflow:hidden}
+  .bar{height:100%;width:0;border-radius:10px;background:var(--accent);transition:width 1.4s ease}
+  .bar.fav{background:var(--gold)}
+  .bar-row .val{text-align:right;font-weight:700;font-size:14px}
+
+  /* Tabela */
+  .filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px}
+  .filters button{background:#fff;color:var(--txt);border:1px solid var(--line);padding:9px 20px;border-radius:40px;cursor:pointer;font-size:14px;font-family:inherit}
+  .filters button:hover{border-color:var(--accent);color:var(--accent)}
+  .filters button.active{background:var(--accent);border-color:var(--accent);color:#fff}
+  .table-wrap{overflow-x:auto;padding:8px}
+  table{width:100%;border-collapse:collapse;min-width:1050px;font-size:14px}
+  th{text-align:left;padding:16px 12px;font-size:12px;font-weight:600;color:var(--muted);border-bottom:1px solid var(--line)}
+  td{padding:16px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:#f8faff}
+  tbody tr.hide{display:none}
+  .rank{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--soft);font-weight:700;margin-right:8px;font-size:12px}
+  tr.fav .rank{background:var(--gold);color:#fff}
+  .site{display:block;font-size:12.5px;margin-top:4px;font-weight:500}
+  footer{text-align:center;color:var(--muted);font-size:13px;padding:50px 20px}
+  @media(max-width:640px){.bar-row{grid-template-columns:110px 1fr 90px}.nav{display:none}}
+</style>
+</head>
+<body>
+
+<!-- Ícones (SVG em linha) -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="i-qr" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 14h3v3M21 14v.01M14 21h3M21 18v3M17.5 17.5h.01"/></symbol>
+    <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 21h18"/><rect x="5" y="11" width="3" height="7" rx="1"/><rect x="10.5" y="6" width="3" height="12" rx="1"/><rect x="16" y="13" width="3" height="5" rx="1"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></symbol>
+    <symbol id="i-coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 9.5h4.5a1.75 1.75 0 0 1 0 3.5h-3a1.75 1.75 0 0 0 0 3.5H15"/></symbol>
+    <symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9M12 8v13M12 8S10.5 3 8 4.5 9.5 8 12 8zM12 8s1.5-5 4-3.5S14.5 8 12 8z"/></symbol>
+    <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-6-6z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></symbol>
+    <symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  </defs>
+</svg>
+
+<div class="topbar"><div class="in">
+  <div class="logo"><svg class="ic"><use href="#i-gift"/></svg></div>
+  <nav class="nav">
+    <a href="#top3">Destaques</a><a href="#qr">Acesso por QR Code</a><a href="#valores">Valores</a><a href="#todos">Todos os fornecedores</a>
+  </nav>
+</div></div>
+
+<div class="hero"><div class="in">
+  <div>
+    <h1>Comparativo de fornecedores de máquinas de grua</h1>
+    <p>Organizado por relevância</p>
+    <a class="cta" href="#top3">Ver destaques <svg class="ic" style="width:18px;height:18px"><use href="#i-arrow"/></svg></a>
+  </div>
+  <div class="hero-ic"><svg viewBox="0 0 24 24"><use href="#i-gift"/></svg></div>
+</div></div>
+
+<div class="shortcuts">
+  <a class="sc" href="#top3"><div class="ico"><svg class="ic"><use href="#i-trophy"/></svg></div><span>Fornecedores em destaque</span></a>
+  <a class="sc" href="#qr"><div class="ico"><svg class="ic"><use href="#i-qr"/></svg></div><span>Acesso por QR Code</span></a>
+  <a class="sc" href="#valores"><div class="ico"><svg class="ic"><use href="#i-chart"/></svg></div><span>Comparativo de valores</span></a>
+  <a class="sc" href="#todos"><div class="ico"><svg class="ic"><use href="#i-list"/></svg></div><span>Todos os fornecedores</span></a>
+</div>
+
+<section id="top3">
+  <h2>Fornecedores mais interessantes</h2>
+  <p class="sub">As três opções com melhor equilíbrio entre valor, prazo e condições.</p>
+  <div class="podium" id="podium"></div>
+</section>
+
+<section id="qr" class="reveal">
+  <h2>Acesso dos colaboradores</h2>
+  <p class="sub">Como o colaborador vai usar a máquina durante a campanha de incentivo.</p>
+  <div class="card qr">
+    <div class="qr-top">
+      <div class="qr-badge"><svg class="ic"><use href="#i-qr"/></svg></div>
+      <div>
+        <h3>QR Code inteligente com liberação automática – Pixmaq</h3>
+        <span class="tag"><svg class="ic" style="width:16px;height:16px"><use href="#i-alert"/></svg>Aparelho a ser incluído posteriormente</span>
+      </div>
+    </div>
+    <p class="lead">O uso da máquina será feito pelo <strong>QR Code inteligente da Pixmaq</strong>
+      (<a href="https://pixmaq.com.br/qr_interativo_liberacao_automatica" target="_blank" rel="noopener noreferrer">pixmaq.com.br/qr_interativo_liberacao_automatica</a>).
+      Ao escanear o código, o colaborador se autentica e realiza uma ação de validação definida pela empresa. Depois de validada, o sistema
+      <strong>libera automaticamente a quantidade de créditos a que ele tem direito</strong> na campanha.</p>
+
+    <div class="steps">
+      <div class="step"><div class="ico"><svg class="ic"><use href="#i-phone"/></svg></div><small>PASSO 1</small><h4>Escaneia o QR Code</h4><p>Aponta a câmera do celular para o QR fixado na máquina. Não é preciso instalar aplicativo.</p></div>
+      <div class="step"><div class="ico"><svg class="ic"><use href="#i-user"/></svg></div><small>PASSO 2</small><h4>Se autentica</h4><p>Informa matrícula, e-mail, telefone ou código interno, conforme a regra configurada.</p></div>
+      <div class="step"><div class="ico"><svg class="ic"><use href="#i-shield"/></svg></div><small>PASSO 3</small><h4>Ação de validação</h4><p>Realiza a ação definida pela empresa, como aceite do regulamento, formulário, pesquisa, vídeo ou código da campanha.</p></div>
+      <div class="step"><div class="ico"><svg class="ic"><use href="#i-coin"/></svg></div><small>PASSO 4</small><h4>Créditos liberados</h4><p>O sistema confirma quantos créditos o colaborador tem direito e libera as jogadas na máquina em segundos.</p></div>
+    </div>
+
+    <ul class="benefits">
+      <li><svg class="ic"><use href="#i-check"/></svg><div><strong>Sem cartões ou fichas:</strong> dispensa cartões, tags ou pulseiras que podem ser perdidos ou emprestados.</div></li>
+      <li><svg class="ic"><use href="#i-coin"/></svg><div><strong>Créditos por colaborador:</strong> cada pessoa recebe a quantidade de jogadas definida pelas regras da campanha.</div></li>
+      <li><svg class="ic"><use href="#i-sliders"/></svg><div><strong>Limites de uso:</strong> é possível definir limites diários, semanais ou mensais por colaborador.</div></li>
+      <li><svg class="ic"><use href="#i-shield"/></svg><div><strong>Validação flexível:</strong> lista de autorizados, aceite de termos, formulário, pesquisa, vídeo ou código da campanha.</div></li>
+      <li><svg class="ic"><use href="#i-file"/></svg><div><strong>Relatórios completos:</strong> registra data, horário, quem usou e o status da validação, com exportação em CSV, Excel e PDF.</div></li>
+    </ul>
+
+    <div class="note"><svg class="ic"><use href="#i-alert"/></svg><div><strong>Importante:</strong> nenhum dos fornecedores cotados oferece QR Code ou código nativo. Por isso, o controlador/aparelho Pixmaq
+      precisará ser <strong>adquirido e instalado depois</strong>, à parte da máquina, e esse custo não está nos valores abaixo.</div></div>
+  </div>
+</section>
+
+<section id="valores" class="reveal">
+  <h2>Comparativo de valores</h2>
+  <p class="sub">Valores informados por cada fornecedor.</p>
+  <div class="card chart" id="chart"></div>
+</section>
+
+<section id="todos" class="reveal">
+  <h2>Todos os fornecedores</h2>
+  <p class="sub">Use os filtros para refinar a lista.</p>
+  <div class="filters">
+    <button class="active" data-f="all">Todos</button>
+    <button data-f="fav">Favoritos</button>
+    <button data-f="venda">Venda / Compra</button>
+    <button data-f="loc">Locação</button>
+  </div>
+  <div class="card table-wrap">
+    <table>
+      <thead><tr>
+        <th>Item</th><th>Venda ou locação</th><th>Personaliza</th><th>QR Code ou código</th>
+        <th>Prazo entrega</th><th>Valor</th><th>Forma de pagamento</th><th>NF</th><th>Observação</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</section>
+
+<footer>Comparativo de fornecedores · Gerado com Microsoft Copilot</footer>
+
+<script>
+  const W = "AGUARDANDO RETORNO";
+  const data = [
+    {nome:"Toy Box",tipo:"COMPRA",pers:"SIM",qr:"NÃO",prazo:"10 A 15 DIAS ÚTEIS",valor:10000,pag:"CARTÃO + TAXA",nf:"SIM - REDUZIDA",obs:"FRETE GRÁTIS - DIADEMA",fav:1,
+     url:"https://www.instagram.com/toyboxdiversoes/reels/",urlTxt:"Instagram @toyboxdiversoes"},
+    {nome:"Grua Events",tipo:"VENDA",pers:"SIM",qr:"NÃO",prazo:"20 DIAS ÚTEIS",valor:19000,pag:"PIX OU CARTÃO EM 12X COM JUROS",nf:"SIM",obs:"",fav:2,
+     url:"https://gruaevents.com.br/ativacoes/maquina-de-garra",urlTxt:"gruaevents.com.br"},
+    {nome:"Premium Machine",tipo:"COMPRA",pers:"PARCIAL",qr:"NÃO",prazo:"\"PRONTA ENTREGA\"",valor:12990,pag:"40% + SALDO NO CARTÃO",nf:"SIM",obs:"RIO GRANDE DO SUL - TEM FRETE",fav:3,
+     url:"https://www.premiummachine.com.br/maquina-grua-de-pegar-pelucia",urlTxt:"premiummachine.com.br"},
+    {nome:"Sonser Entretenimento",tipo:"LOCAÇÃO",pers:"SIM",qr:"NÃO",prazo:"5 DIAS ÚTEIS",valor:24990,pag:"FATURADO 15 DIAS",nf:"SIM",obs:"2 MÁQUINAS SAI A R$ 20.000,00",
+     url:"https://sonser.com.br/",urlTxt:"sonser.com.br"},
+    {nome:"SSE Entretenimento",tipo:"LOCAÇÃO",pers:"SIM",qr:"NÃO",prazo:"ATÉ 25 DIAS ÚTEIS",valor:49900,pag:"FATURADO 20 DIAS",nf:"SIM",obs:"",
+     url:"https://ssentretenimento.com.br/",urlTxt:"ssentretenimento.com.br"},
+    {nome:"Mercado Livre 2",tipo:"VENDA",pers:"SIM",qr:"NÃO",prazo:"PRONTA ENTREGA",valor:7899,pag:"CARTÃO DE CRÉDITO",nf:"???",obs:"FRETE R$ 150,00",
+     url:"https://www.mercadolivre.com.br/maquina-de-garra-multjogos-garra-grua/up/MLBU4104733352?pdp_filters=item_id:MLB4777024625",urlTxt:"Ver anúncio"},
+    {nome:"Mercado Livre 1",tipo:"VENDA",pers:"NÃO",qr:"NÃO",prazo:W,valor:8599,pag:"CRÉDITO OU PIX",nf:"???",obs:"",
+     url:"https://www.mercadolivre.com.br/maquina-grua-ursinhos-de-pelucia/up/MLBU773236941?pdp_filters=item_id:MLB3827959893",urlTxt:"Ver anúncio"},
+    {nome:"Diverbras",tipo:"VENDA",pers:W,qr:W,prazo:W,valor:null,pag:W,nf:W,obs:W,
+     url:"https://www.diverbras.com.br/gruas-de-pelucia/?gad_source=1&gad_campaignid=23329137498&gbraid=0AAAABBsBejm-wPk4Eq3fPLVMC5tNh_m_d&gclid=CjwKCAjw9PvWBhAxEiwAddzYyUftWdVfBIMCdI_N7XCYQ7s0xMfV9NPyp4aQ4_F7-0gVRoTmPEW9NxoCSawQAvD_BwE",urlTxt:"diverbras.com.br"}
+  ];
+  const brl = v => v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+  const cls = v => v.startsWith("SIM") ? "yes" : v==="NÃO" ? "no" : [W,"PARCIAL","???"].includes(v) ? "wait" : "";
+  const isLoc = d => d.tipo==="LOCAÇÃO";
+  const ext = '<svg class="ic" style="width:15px;height:15px"><use href="#i-ext"/></svg>';
+
+  // Pódio
+  const podium = document.getElementById("podium");
+  data.filter(d=>d.fav).forEach(d=>{
+    const el = document.createElement("article");
+    el.className = `card top r${d.fav} reveal`;
+    el.innerHTML = `
+      <div class="top-head"><span class="pill ${isLoc(d)?"p-loc":"p-venda"}">${d.tipo}</span><div class="medal">${d.fav}º</div></div>
+      <h3>${d.nome}</h3>
+      <div class="price" data-value="${d.valor}">R$ 0,00</div>
+      <ul class="info">
+        <li><b>Personaliza</b><span class="${cls(d.pers)}">${d.pers}</span></li>
+        <li><b>QR Code ou código</b><span class="${cls(d.qr)}">${d.qr}</span></li>
+        <li><b>Prazo de entrega</b><span>${d.prazo}</span></li>
+        <li><b>Pagamento</b><span>${d.pag}</span></li>
+        <li><b>NF</b><span class="${cls(d.nf)}">${d.nf}</span></li>
+      </ul>
+      <div class="obs">${d.obs || "Sem observações"}</div>
+      <div class="btn"><a href="${d.url}" target="_blank" rel="noopener noreferrer">Visitar ${d.urlTxt} ${ext}</a></div>`;
+    podium.appendChild(el);
+  });
+
+  // Tabela
+  const tb = document.getElementById("tbody");
+  data.forEach((d,i)=>{
+    const tr = document.createElement("tr");
+    tr.dataset.tipo = isLoc(d) ? "loc" : "venda";
+    if(d.fav) tr.classList.add("fav");
+    tr.innerHTML = `
+      <td><span class="rank">${i+1}</span><strong>${d.nome}</strong><a class="site" href="${d.url}" target="_blank" rel="noopener noreferrer">${d.urlTxt} ↗</a></td>
+      <td><span class="pill ${isLoc(d)?"p-loc":"p-venda"}">${d.tipo}</span></td>
+      <td class="${cls(d.pers)}">${d.pers}</td>
+      <td class="${cls(d.qr)}">${d.qr}</td>
+      <td class="${cls(d.prazo)}">${d.prazo}</td>
+      <td><strong>${d.valor ? brl(d.valor) : `<span class="wait">${W}</span>`}</strong></td>
+      <td class="${cls(d.pag)}">${d.pag}</td>
+      <td class="${cls(d.nf)}">${d.nf}</td>
+      <td class="${cls(d.obs)}">${d.obs || "—"}</td>`;
+    tb.appendChild(tr);
+  });
+
+  // Filtros
+  document.querySelectorAll(".filters button").forEach(b=>b.addEventListener("click",()=>{
+    document.querySelectorAll(".filters button").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+    const f = b.dataset.f;
+    tb.querySelectorAll("tr").forEach(tr=>{
+      tr.classList.toggle("hide",!(f==="all" || (f==="fav"&&tr.classList.contains("fav")) || tr.dataset.tipo===f));
+    });
+  }));
+
+  // Gráfico
+  const chart = document.getElementById("chart");
+  const max = Math.max(...data.filter(d=>d.valor).map(d=>d.valor));
+  data.forEach(d=>{
+    const r = document.createElement("div");
+    r.className = "bar-row";
+    r.innerHTML = `<div class="lbl">${d.fav?"★ ":""}${d.nome}</div>
+      <div class="track"><div class="bar ${d.fav?"fav":""}" data-w="${d.valor?d.valor/max*100:0}"></div></div>
+      <div class="val">${d.valor?brl(d.valor):'<span class="wait">Aguardando</span>'}</div>`;
+    chart.appendChild(r);
+  });
+
+  function countUp(el){
+    const t = +el.dataset.value, t0 = performance.now();
+    (function s(n){const p=Math.min((n-t0)/1400,1);el.textContent=brl(t*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(s);})(t0);
+  }
+  const io = new IntersectionObserver(es=>es.forEach(e=>{
+    if(!e.isIntersecting) return;
+    e.target.classList.add("show");
+    e.target.querySelectorAll("[data-value]").forEach(countUp);
+    e.target.querySelectorAll(".bar").forEach(b=>setTimeout(()=>b.style.width=b.dataset.w+"%",200));
+    io.unobserve(e.target);
+  }),{threshold:.15});
+  document.querySelectorAll(".reveal").forEach((el,i)=>{el.style.transitionDelay=(i%3)*0.1+"s";io.observe(el)});
+</script>
+</body>
+</html>
